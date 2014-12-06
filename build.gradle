@@ -1,0 +1,38 @@
+apply plugin: 'java'
+
+def defaultEncoding = 'UTF-8'
+def jdkVersion = '1.8'
+
+sourceCompatibility = jdkVersion
+targetCompatibility = jdkVersion
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'io.dropwizard:dropwizard-core:0.7.1'
+    testCompile 'junit:junit:4.+'
+}
+
+jar {
+    from (configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }) {
+        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/*.SF'
+        exclude 'META-INF/*.DSA'
+        exclude 'META-INF/*.RSA'
+    }
+    manifest {
+        attributes('Main-Class': 'com.example.helloworld.HelloWorldApplication')
+    }
+}
+
+compileJava {
+    options.encoding = defaultEncoding
+}
+
+clean {
+    println 'Default Cleaning!'
+}
+
+apply plugin: 'eclipse-wtp'
